@@ -60,13 +60,13 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
         DrawTime,
       ],
       synchronize: false, // never use TRUE in production!
-      // ssl: true,
-      // extra: {
-      //   ssl: {
-      //     require: true,
-      //     rejectUnauthorized: false,
-      //   },
-      // },
+      ssl: true,
+      extra: {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false,
+        },
+      },
     };
   }
 }

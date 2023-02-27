@@ -29,7 +29,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   private readonly config: ConfigService;
 
   public createTypeOrmOptions(): TypeOrmModuleOptions {
-    return {
+    const ssl = this.config.get<string>("SSL");
+    let config: TypeOrmModuleOptions = {
       type: "postgres",
       host: this.config.get<string>("DATABASE_HOST"),
       port: Number(this.config.get<number>("DATABASE_PORT")),
@@ -60,13 +61,17 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
         DrawTime,
       ],
       synchronize: false, // never use TRUE in production!
-      ssl: true,
+      ssl: ssl.toLocaleLowerCase().includes("true"),
       extra: {
-        ssl: {
-          require: true,
-          rejectUnauthorized: false,
-        },
-      },
+
+      }
     };
+    if(config.ssl) {
+      config.extra.ssl = {
+        require: true,
+        rejectUnauthorized: false,
+      }
+    }
+    return config;
   }
 }
